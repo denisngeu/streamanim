@@ -1,0 +1,90 @@
+/* Réinitialisation des marges et des paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corps de la page */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* En-tête */
+header {
+    background-color: #000;
+    color: #fff;
+    padding: 1rem;
+}
+
+header h1 {
+    font-size: 2rem;
+}
+
+/* Barre de navigation */
+nav {
+    margin-top: 1rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 1rem;
+}
+
+/* Section principale */
+main {
+    padding: 2rem;
+}
+
+/* Cartes d'anime */
+.anime-card {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.anime-card img {
+    width: 100%;
+    height: auto;
+}
+
+.anime-card h3 {
+    font-size: 1.5rem;
+    margin: 1rem;
+}
+
+.anime-card p {
+    margin: 0 1rem 1rem;
+}
+
+/* Pied de page */
+footer {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Media Queries pour la réactivité */
+@media (min-width: 768px) {
+    .anime-card {
+        display: flex;
+    }
+
+    .anime-card img {
+        width: 50%;
+    }
+
+    .anime-card div {
+        padding: 1rem;
+    }
+}

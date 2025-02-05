@@ -1,0 +1,95 @@
+<!-- index.html (Page d'accueil améliorée) -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeStream - Accueil</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function() {
+            loadFeaturedAnimes();
+        });
+
+        function searchAnime() {
+            let query = document.getElementById("search").value.trim();
+            if (!query) {
+                alert("Veuillez entrer un titre d'anime.");
+                return;
+            }
+            fetchAnimes(query);
+        }
+
+        async function fetchAnimes(query) {
+            try {
+                let response = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=10`);
+                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+                let data = await response.json();
+                if (!data.data || data.data.length === 0) throw new Error("Aucun anime trouvé.");
+                displayAnimes(data.data, "anime-list");
+            } catch (error) {
+                console.error("Erreur lors de la recherche d'anime :", error);
+                document.getElementById("anime-list").innerHTML = `<p>${error.message}</p>`;
+            }
+        }
+
+        async function loadFeaturedAnimes() {
+            try {
+                let response = await fetch(`https://api.jikan.moe/v4/top/anime?limit=5`);
+                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+                let data = await response.json();
+                if (!data.data || data.data.length === 0) throw new Error("Aucun anime populaire trouvé.");
+                displayAnimes(data.data, "featured-list");
+            } catch (error) {
+                console.error("Erreur lors du chargement des animes populaires :", error);
+                document.getElementById("featured-list").innerHTML = `<p>${error.message}</p>`;
+            }
+        }
+
+        function displayAnimes(animes, containerId) {
+            let animeList = document.getElementById(containerId);
+            animeList.innerHTML = "";
+            animes.forEach(anime => {
+                let animeCard = document.createElement("div");
+                animeCard.innerHTML = `
+                    <h3>${anime.title}</h3>
+                    <img src="${anime.images?.jpg?.image_url || ''}" alt="${anime.title}" width="200">
+                    <p>Score : ${anime.score || 'N/A'}</p>
+                    <p>Episodes : ${anime.episodes || 'Inconnu'}</p>
+                    <a href="anime.html?id=${anime.mal_id}">Voir plus</a>
+                `;
+                animeList.appendChild(animeCard);
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>AnimeStream</h1>
+        <nav>
+            <a href="index.html">Accueil</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <input type="text" id="search" placeholder="Rechercher un anime...">
+            <button onclick="searchAnime()">🔍</button>
+        </section>
+
+        <section>
+            <h2>À la une</h2>
+            <div id="featured-list"></div>
+        </section>
+
+        <section>
+            <h2>Derniers ajouts</h2>
+            <div id="anime-list"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 AnimeStream. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

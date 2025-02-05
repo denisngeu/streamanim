@@ -1,0 +1,87 @@
+<!-- auth.html (Page de connexion/inscription améliorée) -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeStream - Connexion</title>
+</head>
+<body>
+    <header>
+        <h1>AnimeStream</h1>
+        <a href="index.html" class="back-link">&#8592; Retour à l'accueil</a>
+    </header>
+    
+    <main>
+        <section class="auth-container">
+            <div class="auth-box" id="login-box">
+                <h2>Connexion</h2>
+                <form id="login-form">
+                    <label for="login-username">Pseudo :</label>
+                    <input type="text" id="login-username" placeholder="Votre pseudo" required>
+                    
+                    <label for="login-password">Mot de passe :</label>
+                    <input type="password" id="login-password" placeholder="Votre mot de passe" required>
+                    
+                    <button type="submit">Se connecter</button>
+                    <p class="switch">Pas encore inscrit ? <a href="#" onclick="toggleForms()">Créer un compte</a></p>
+                </form>
+            </div>
+            
+            <div class="auth-box" id="register-box" style="display:none;">
+                <h2>Inscription</h2>
+                <form id="register-form">
+                    <label for="register-username">Pseudo :</label>
+                    <input type="text" id="register-username" placeholder="Choisissez un pseudo" required>
+                    
+                    <label for="register-password">Mot de passe :</label>
+                    <input type="password" id="register-password" placeholder="Choisissez un mot de passe" required>
+                    
+                    <label for="register-confirm-password">Confirmer le mot de passe :</label>
+                    <input type="password" id="register-confirm-password" placeholder="Confirmez le mot de passe" required>
+                    
+                    <button type="submit">S'inscrire</button>
+                    <p class="switch">Déjà un compte ? <a href="#" onclick="toggleForms()">Se connecter</a></p>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 AnimeStream. Tous droits réservés.</p>
+    </footer>
+    
+    <script>
+        function toggleForms() {
+            const loginBox = document.getElementById("login-box");
+            const registerBox = document.getElementById("register-box");
+            
+            loginBox.style.display = loginBox.style.display === "none" ? "block" : "none";
+            registerBox.style.display = registerBox.style.display === "none" ? "block" : "none";
+        }
+
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            alert("Connexion réussie !");
+        });
+        
+        document.getElementById("register-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const password = document.getElementById("register-password").value;
+            const confirmPassword = document.getElementById("register-confirm-password").value;
+            
+            if (password.length < 6) {
+                alert("Le mot de passe doit contenir au moins 6 caractères.");
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert("Les mots de passe ne correspondent pas.");
+                return;
+            }
+            
+            alert("Inscription réussie !");
+        });
+    </script>
+</body>
+</html>

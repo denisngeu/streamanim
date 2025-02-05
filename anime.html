@@ -1,0 +1,72 @@
+<!-- anime.html (Page de détails optimisée d'un anime) -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeStream - Détails de l'Anime</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>AnimeStream</h1>
+        <a href="index.html" class="back-link">&#8592; Retour à l'accueil</a>
+    </header>
+    
+    <main>
+        <section id="anime-details" class="anime-details-container">
+            <div class="anime-image-container">
+                <img id="anime-image" src="" alt="Image de l'anime">
+            </div>
+            <div class="anime-info">
+                <h2 id="anime-title">Chargement...</h2>
+                <p><strong>Score :</strong> <span id="anime-score">...</span></p>
+                <p><strong>Épisodes :</strong> <span id="anime-episodes">...</span></p>
+                <p><strong>Statut :</strong> <span id="anime-status">...</span></p>
+                <p><strong>Genres :</strong> <span id="anime-genres">...</span></p>
+                <p><strong>Studio :</strong> <span id="anime-studio">...</span></p>
+                <p><strong>Date de sortie :</strong> <span id="anime-premiered">...</span></p>
+                <p><strong>Synopsis :</strong> <span id="anime-synopsis">...</span></p>
+                <a id="anime-link" href="#" target="_blank">Voir sur MyAnimeList</a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 AnimeStream. Tous droits réservés.</p>
+    </footer>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const animeId = urlParams.get("id");
+            
+            if (!animeId) {
+                document.getElementById("anime-details").innerHTML = "<p>Aucun anime sélectionné.</p>";
+                return;
+            }
+            
+            fetch(`https://api.jikan.moe/v4/anime/${animeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const anime = data.data;
+                    document.getElementById("anime-title").textContent = anime.title;
+                    document.getElementById("anime-image").src = anime.images.jpg.image_url;
+                    document.getElementById("anime-score").textContent = anime.score || "N/A";
+                    document.getElementById("anime-episodes").textContent = anime.episodes || "Inconnu";
+                    document.getElementById("anime-status").textContent = anime.status || "Inconnu";
+                    document.getElementById("anime-genres").textContent = anime.genres.map(g => g.name).join(", ") || "Non défini";
+                    document.getElementById("anime-studio").textContent = anime.studios.length > 0 ? anime.studios[0].name : "Inconnu";
+                    document.getElementById("anime-premiered").textContent = anime.aired.string || "Non spécifié";
+                    document.getElementById("anime-synopsis").textContent = anime.synopsis || "Pas de synopsis disponible.";
+                    document.getElementById("anime-link").href = `https://myanimelist.net/anime/${animeId}`;
+                })
+                .catch(error => {
+                    console.error("Erreur lors du chargement des détails de l'anime :", error);
+                    document.getElementById("anime-details").innerHTML = "<p>Erreur lors du chargement des détails.</p>";
+                });
+        });
+    </script>
+</body>
+</html>
