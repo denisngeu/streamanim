@@ -1,90 +1,103 @@
-/* Réinitialisation des marges et des paddings */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Corps de la page */
+/* Background dégradé rose noir avec animation */
 body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #f4f4f4;
-    color: #333;
+    background: linear-gradient(135deg, #ff007f, #1b1b1b);
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
 }
 
-/* En-tête */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 header {
-    background-color: #000;
-    color: #fff;
-    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 header h1 {
     font-size: 2rem;
-}
-
-/* Barre de navigation */
-nav {
-    margin-top: 1rem;
+    color: #ff007f;
 }
 
 nav a {
-    color: #fff;
     text-decoration: none;
-    margin-right: 1rem;
+    color: #ffffff;
+    margin-left: 1rem;
+    transition: color 0.3s;
 }
 
-/* Section principale */
+nav a:hover {
+    color: #ff007f;
+}
+
 main {
-    padding: 2rem;
+    padding-top: 4rem;
+    max-width: 1200px;
+    margin: auto;
 }
 
-/* Cartes d'anime */
-.anime-card {
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+main section {
+    padding: 2rem;
     margin-bottom: 2rem;
-    overflow: hidden;
+}
+
+main h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #ff007f;
+}
+
+.anime-card {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .anime-card img {
-    width: 100%;
-    height: auto;
+    width: 120px;
+    border-radius: 5px;
 }
 
 .anime-card h3 {
-    font-size: 1.5rem;
-    margin: 1rem;
+    font-size: 1.2rem;
+    margin: 0;
 }
 
-.anime-card p {
-    margin: 0 1rem 1rem;
-}
-
-/* Pied de page */
 footer {
-    background-color: #000;
-    color: #fff;
     text-align: center;
     padding: 1rem;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
 }
 
-/* Media Queries pour la réactivité */
-@media (min-width: 768px) {
+/* Responsif */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
     .anime-card {
-        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .anime-card img {
-        width: 50%;
-    }
-
-    .anime-card div {
-        padding: 1rem;
+        width: 100%;
     }
 }
