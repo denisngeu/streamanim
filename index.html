@@ -1,4 +1,3 @@
-<!-- index.html (Page d'accueil améliorée) -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,59 +6,91 @@
     <title>AnimeStream - Accueil</title>
     <link rel="stylesheet" href="style.css">
     <script defer>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", () => {
             loadFeaturedAnimes();
+            displayFavorites();
         });
-
-        function searchAnime() {
-            let query = document.getElementById("search").value.trim();
-            if (!query) {
-                alert("Veuillez entrer un titre d'anime.");
-                return;
-            }
-            fetchAnimes(query);
-        }
-
-        async function fetchAnimes(query) {
-            try {
-                let response = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=10`);
-                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-                let data = await response.json();
-                if (!data.data || data.data.length === 0) throw new Error("Aucun anime trouvé.");
-                displayAnimes(data.data, "anime-list");
-            } catch (error) {
-                console.error("Erreur lors de la recherche d'anime :", error);
-                document.getElementById("anime-list").innerHTML = `<p>${error.message}</p>`;
-            }
-        }
 
         async function loadFeaturedAnimes() {
             try {
-                let response = await fetch(`https://api.jikan.moe/v4/top/anime?limit=5`);
+                const response = await fetch("https://api.jikan.moe/v4/top/anime?limit=5");
                 if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-                let data = await response.json();
-                if (!data.data || data.data.length === 0) throw new Error("Aucun anime populaire trouvé.");
-                displayAnimes(data.data, "featured-list");
+                const { data } = await response.json();
+                displayAnimes(data, "featured-list");
             } catch (error) {
                 console.error("Erreur lors du chargement des animes populaires :", error);
                 document.getElementById("featured-list").innerHTML = `<p>${error.message}</p>`;
             }
         }
 
+        async function searchAnime(page = 1) {
+            const query = document.getElementById("search").value.trim();
+            if (!query) return alert("Veuillez entrer un titre d'anime.");
+            await fetchAnimes(query, page);
+        }
+
+        async function fetchAnimes(query, page = 1) {
+            try {
+                const response = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&page=${page}&limit=10`);
+                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+                const { data, pagination } = await response.json();
+                displayAnimes(data, "anime-list");
+                displayPagination(query, pagination);
+            } catch (error) {
+                console.error("Erreur lors de la recherche d'anime :", error);
+                document.getElementById("anime-list").innerHTML = `<p>${error.message}</p>`;
+            }
+        }
+
         function displayAnimes(animes, containerId) {
-            let animeList = document.getElementById(containerId);
-            animeList.innerHTML = "";
-            animes.forEach(anime => {
-                let animeCard = document.createElement("div");
-                animeCard.innerHTML = `
+            const animeList = document.getElementById(containerId);
+            animeList.innerHTML = animes.map(anime => `
+                <div class="anime-card">
                     <h3>${anime.title}</h3>
-                    <img src="${anime.images?.jpg?.image_url || ''}" alt="${anime.title}" width="200">
-                    <p>Score : ${anime.score || 'N/A'}</p>
-                    <p>Episodes : ${anime.episodes || 'Inconnu'}</p>
-                    <a href="anime.html?id=${anime.mal_id}">Voir plus</a>
-                `;
-                animeList.appendChild(animeCard);
-            });
+                    <img src="${anime.images?.jpg?.image_url || ''}" alt="${anime.title}" loading="lazy" width="200">
+                    <p><strong>Score :</strong> ${anime.score || 'N/A'}</p>
+                    <p><strong>Episodes :</strong> ${anime.episodes || 'Inconnu'}</p>
+                    <p><strong>Synopsis :</strong> ${anime.synopsis ? anime.synopsis.slice(0, 150) + '...' : 'Non disponible.'}</p>
+                    <button onclick="addToFavorites('${anime.title}')">Ajouter aux favoris</button>
+                </div>
+            `).join("");
+        }
+
+        function displayFavorites() {
+            const favoritesList = document.getElementById("favorites-list");
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favoritesList.innerHTML = favorites.length 
+                ? favorites.map(title => `<li>${title} <button onclick="removeFavorite('${title}')">❌</button></li>`).join('')
+                : '<p>Vous n\'avez aucun favori.</p>';
+        }
+
+        function addToFavorites(title) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            if (!favorites.includes(title)) {
+                favorites.push(title);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                displayFavorites();
+            } else {
+                alert("Cet anime est déjà dans vos favoris.");
+            }
+        }
+
+        function removeFavorite(title) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites = favorites.filter(fav => fav !== title);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            displayFavorites();
+        }
+
+        function displayPagination(query, pagination) {
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+            for (let i = 1; i <= pagination.last_visible_page; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.textContent = i;
+                pageButton.onclick = () => searchAnime(i);
+                paginationContainer.appendChild(pageButton);
+            }
         }
     </script>
 </head>
@@ -85,6 +116,12 @@
         <section>
             <h2>Derniers ajouts</h2>
             <div id="anime-list"></div>
+            <div id="pagination"></div>
+        </section>
+
+        <section>
+            <h2>Vos Favoris</h2>
+            <ul id="favorites-list"></ul>
         </section>
     </main>
 
