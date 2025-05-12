@@ -1,4 +1,4 @@
-/* Background dégradé rose noir avec animation */
+
 body {
     background: linear-gradient(135deg, #ff007f, #1b1b1b);
     background-size: 400% 400%;
