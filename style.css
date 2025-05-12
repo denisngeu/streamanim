@@ -1,4 +1,4 @@
-
+/* Background dégradé rose noir avec animation */
 body {
     background: linear-gradient(135deg, #ff007f, #1b1b1b);
     background-size: 400% 400%;
@@ -15,7 +15,7 @@ body {
 }
 
 header {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -24,26 +24,33 @@ header {
     top: 0;
     width: 100%;
     z-index: 1000;
+    transition: background 0.3s;
+}
+
+header:hover {
+    background: rgba(0, 0, 0, 0.95);
 }
 
 header h1 {
     font-size: 2rem;
     color: #ff007f;
+    transition: color 0.3s;
 }
 
 nav a {
     text-decoration: none;
     color: #ffffff;
     margin-left: 1rem;
-    transition: color 0.3s;
+    transition: color 0.3s, transform 0.3s;
 }
 
 nav a:hover {
     color: #ff007f;
+    transform: scale(1.05);
 }
 
 main {
-    padding-top: 4rem;
+    padding-top: 5rem;
     max-width: 1200px;
     margin: auto;
 }
@@ -51,12 +58,14 @@ main {
 main section {
     padding: 2rem;
     margin-bottom: 2rem;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-main h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    color: #ff007f;
+main section:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 .anime-card {
@@ -67,22 +76,18 @@ main h2 {
     display: flex;
     align-items: center;
     gap: 1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.anime-card img {
-    width: 120px;
-    border-radius: 5px;
-}
-
-.anime-card h3 {
-    font-size: 1.2rem;
-    margin: 0;
+.anime-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 footer {
     text-align: center;
     padding: 1rem;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     color: #ffffff;
 }
 
@@ -99,5 +104,10 @@ footer {
 
     .anime-card img {
         width: 100%;
+    }
+
+    main section {
+        padding: 1rem;
+        margin-bottom: 1rem;
     }
 }
